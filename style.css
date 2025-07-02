@@ -1,0 +1,84 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+div * {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+#chessboard {
+    max-width: 504px;
+    max-height: 504px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    margin: 20px auto;
+}
+
+.rowlabel {
+    width: 100%;
+    height: 100%;
+    max-width: 50px;
+    max-height: 50px;
+    float: left;
+    margin: 2px;
+    padding: 15px 0 0 20px;
+}
+
+
+.gamecell {
+    border: 1px solid #000;
+    width: 100%;
+    height: 100%;
+    max-width: 50px;
+    max-height: 50px;
+    float: left;
+    margin: 3px;
+    transition: all 0.5s ease-in-out;
+    border-radius: 5px;
+    font-size: 30pt;
+    padding: 0 0 0 6px;
+    cursor: pointer;
+    z-index: 1;
+  }  
+
+  .gamecell:hover {
+    color: #fff;
+    background: rgba(131, 69, 69, 0.712);
+    z-index: 2;
+    animation:  0.5s ease-in-out infinite alternate;
+  }
+
+  .coloured {
+    background: rgba(234, 158, 158, 0.801);
+  }
+  
+  .available {
+    background: rgb(254, 203, 149) !important;
+  } 
+
+  #turn {
+    max-width: 451px;
+    max-height: 30px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    text-align: center;
+    padding: 5px 0 0 0;
+    margin-bottom: 20px;
+    background: #fff;
+    transition: .85s linear;
+  }
+  
+  .turnhighlight {
+    background: #d6f0d6 !important;
+    /* color: #fff; */
+  }
+  

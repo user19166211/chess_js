@@ -1,5 +1,5 @@
 # chess_js
-javascript chess
+
 
 A Two Player Chess game application using JavaScript
 

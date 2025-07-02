@@ -9,57 +9,58 @@ let main = {
           position: '5_1',
           img: '&#9812;',
           captured: false,
-          type: 'w_king',
-          moved: false
+          moved: false,
+          type: 'w_king'
+          
         },
         w_queen: {
           position: '4_1',
           img: '&#9813;',
           captured: false,
-          type: 'w_queen',
-          moved: false
+          moved: false,
+          type: 'w_queen'
         },
         w_bishop1: {
           position: '3_1',
           img: '&#9815;',
           captured: false,
-          type: 'w_bishop',
-          moved: false
+          moved: false,
+          type: 'w_bishop'
         },
         w_bishop2: {
           position: '6_1',
           img: '&#9815;',
           captured: false,
-          type: 'w_bishop',
-          moved: false
+          moved: false,
+          type: 'w_bishop'
         },
         w_knight1: {
           position: '2_1',
           img: '&#9816;',
           captured: false,
-          type: 'w_knight',
-          moved: false
+          moved: false,
+          type: 'w_knight'
         },
         w_knight2: {
           position: '7_1',
           img: '&#9816;',
           captured: false,
-          type: 'w_knight',
-          moved: false
+          moved: false,
+          type: 'w_knight'
         },
         w_rook1: {
           position: '1_1',
           img: '&#9814;',
           captured: false,
-          type: 'w_rook',
-          moved: false
+          moved: false,
+          type: 'w_rook'
         },
         w_rook2: {
           position: '8_1',
           img: '&#9814;',
           captured: false,
-          type: 'w_rook',
-          moved: false
+          moved: false,
+          type: 'w_rook'
         },
         w_pawn1: {
           position: '1_2',
@@ -234,7 +235,688 @@ let main = {
       }
     },
   
-    
-    
-  };
+    methods: {
+      gamesetup: function() {
+        $('.gamecell').attr('chess', 'null');
+        for (let gamepiece in main.variables.pieces) {
+          $('#' + main.variables.pieces[gamepiece].position).html(main.variables.pieces[gamepiece].img);
+          $('#' + main.variables.pieces[gamepiece].position).attr('chess', gamepiece);
+        }
+      },
+  
+      moveoptions: function(selectedpiece) {
+  
+        let position = { x: '', y: '' };
+        position.x = main.variables.pieces[selectedpiece].position.split('_')[0];
+        position.y = main.variables.pieces[selectedpiece].position.split('_')[1];
 
+        
+        var options = []; 
+        var coordinates = [];
+        var startpoint = main.variables.pieces[selectedpiece].position;
+        var c1,c2,c3,c4,c5,c6,c7,c8;
+  
+        if (main.variables.highlighted.length != 0) {
+          main.methods.togglehighlight(main.variables.highlighted);
+        }
+  
+        switch (main.variables.pieces[selectedpiece].type) {
+          case 'w_king':
+  
+            if ($('#6_1').attr('chess') == 'null' && $('#7_1').attr('chess') == 'null' && main.variables.pieces['w_king'].moved == false && main.variables.pieces['w_rook2'].moved == false) {
+              coordinates = [{ x: 1, y: 1 },{ x: 1, y: 0 },{ x: 1, y: -1 },{ x: 0, y: -1 },{ x: -1, y: -1 },{ x: -1, y: 0 },{ x: -1, y: 1 },{ x: 0, y: 1 },{x: 2, y: 0}].map(function(val){
+                return (parseInt(position.x) + parseInt(val.x)) + '_' + (parseInt(position.y) + parseInt(val.y));
+              });
+            } else {
+              coordinates = [{ x: 1, y: 1 },{ x: 1, y: 0 },{ x: 1, y: -1 },{ x: 0, y: -1 },{ x: -1, y: -1 },{ x: -1, y: 0 },{ x: -1, y: 1 },{ x: 0, y: 1 }].map(function(val){
+                return (parseInt(position.x) + parseInt(val.x)) + '_' + (parseInt(position.y) + parseInt(val.y));
+              });
+            }
+  
+            options = (main.methods.options(startpoint, coordinates, main.variables.pieces[selectedpiece].type)).slice(0);
+            main.variables.highlighted = options.slice(0);
+            main.methods.togglehighlight(options);
+  
+            break;
+          case 'b_king':
+  
+          if ($('#6_8').attr('chess') == 'null' && $('#7_8').attr('chess') == 'null' && main.variables.pieces['b_king'].moved == false && main.variables.pieces['b_rook2'].moved == false) {
+            coordinates = [{ x: 1, y: 1 },{ x: 1, y: 0 },{ x: 1, y: -1 },{ x: 0, y: -1 },{ x: -1, y: -1 },{ x: -1, y: 0 },{ x: -1, y: 1 },{ x: 0, y: 1 },{x: 2, y: 0}].map(function(val){
+              return (parseInt(position.x) + parseInt(val.x)) + '_' + (parseInt(position.y) + parseInt(val.y));
+            });
+          } else {
+            coordinates = [{ x: 1, y: 1 },{ x: 1, y: 0 },{ x: 1, y: -1 },{ x: 0, y: -1 },{ x: -1, y: -1 },{ x: -1, y: 0 },{ x: -1, y: 1 },{ x: 0, y: 1 }].map(function(val){
+              return (parseInt(position.x) + parseInt(val.x)) + '_' + (parseInt(position.y) + parseInt(val.y));
+            });
+          }
+
+          
+            options = (main.methods.options(startpoint, coordinates, main.variables.pieces[selectedpiece].type)).slice(0);
+            main.variables.highlighted = options.slice(0);
+            main.methods.togglehighlight(options);
+  
+            break;
+          case 'w_queen':
+  
+            c1 = main.methods.w_options(position,[{x: 1, y: 1},{x: 2, y: 2},{x: 3, y: 3},{x: 4, y: 4},{x: 5, y: 5},{x: 6, y: 6},{x: 7, y: 7}]);
+            c2 = main.methods.w_options(position,[{x: 1, y: -1},{x: 2, y: -2},{x: 3, y: -3},{x: 4, y: -4},{x: 5, y: -5},{x: 6, y: -6},{x: 7, y: -7}]);
+            c3 = main.methods.w_options(position,[{x: -1, y: 1},{x: -2, y: 2},{x: -3, y: 3},{x: -4, y: 4},{x: -5, y: 5},{x: -6, y: 6},{x: -7, y: 7}]);
+            c4 = main.methods.w_options(position,[{x: -1, y: -1},{x: -2, y: -2},{x: -3, y: -3},{x: -4, y: -4},{x: -5, y: -5},{x: -6, y: -6},{x: -7, y: -7}]);
+            c5 = main.methods.w_options(position,[{x: 1, y: 0},{x: 2, y: 0},{x: 3, y: 0},{x: 4, y: 0},{x: 5, y: 0},{x: 6, y: 0},{x: 7, y: 0}]);
+            c6 = main.methods.w_options(position,[{x: 0, y: 1},{x: 0, y: 2},{x: 0, y: 3},{x: 0, y: 4},{x: 0, y: 5},{x: 0, y: 6},{x: 0, y: 7}]);
+            c7 = main.methods.w_options(position,[{x: -1, y: 0},{x: -2, y: 0},{x: -3, y: 0},{x: -4, y: 0},{x: -5, y: 0},{x: -6, y: 0},{x: -7, y: 0}]);
+            c8 = main.methods.w_options(position,[{x: 0, y: -1},{x: 0, y: -2},{x: 0, y: -3},{x: 0, y: -4},{x: 0, y: -5},{x: 0, y: -6},{x: 0, y: -7}]);
+  
+            coordinates = c1.concat(c2).concat(c3).concat(c4).concat(c5).concat(c6).concat(c7).concat(c8);
+            
+            options = coordinates.slice(0);
+            main.variables.highlighted = options.slice(0);
+            main.methods.togglehighlight(options);
+  
+            break;
+          case 'b_queen':
+            
+              c1 = main.methods.b_options(position,[{x: 1, y: 1},{x: 2, y: 2},{x: 3, y: 3},{x: 4, y: 4},{x: 5, y: 5},{x: 6, y: 6},{x: 7, y: 7}]);
+              c2 = main.methods.b_options(position,[{x: 1, y: -1},{x: 2, y: -2},{x: 3, y: -3},{x: 4, y: -4},{x: 5, y: -5},{x: 6, y: -6},{x: 7, y: -7}]);
+              c3 = main.methods.b_options(position,[{x: -1, y: 1},{x: -2, y: 2},{x: -3, y: 3},{x: -4, y: 4},{x: -5, y: 5},{x: -6, y: 6},{x: -7, y: 7}]);
+              c4 = main.methods.b_options(position,[{x: -1, y: -1},{x: -2, y: -2},{x: -3, y: -3},{x: -4, y: -4},{x: -5, y: -5},{x: -6, y: -6},{x: -7, y: -7}]);
+              c5 = main.methods.b_options(position,[{x: 1, y: 0},{x: 2, y: 0},{x: 3, y: 0},{x: 4, y: 0},{x: 5, y: 0},{x: 6, y: 0},{x: 7, y: 0}]);
+              c6 = main.methods.b_options(position,[{x: 0, y: 1},{x: 0, y: 2},{x: 0, y: 3},{x: 0, y: 4},{x: 0, y: 5},{x: 0, y: 6},{x: 0, y: 7}]);
+              c7 = main.methods.b_options(position,[{x: -1, y: 0},{x: -2, y: 0},{x: -3, y: 0},{x: -4, y: 0},{x: -5, y: 0},{x: -6, y: 0},{x: -7, y: 0}]);
+              c8 = main.methods.b_options(position,[{x: 0, y: -1},{x: 0, y: -2},{x: 0, y: -3},{x: 0, y: -4},{x: 0, y: -5},{x: 0, y: -6},{x: 0, y: -7}]);
+    
+              coordinates = c1.concat(c2).concat(c3).concat(c4).concat(c5).concat(c6).concat(c7).concat(c8);
+              
+              options = coordinates.slice(0);
+              main.variables.highlighted = options.slice(0);
+              main.methods.togglehighlight(options);
+    
+              break;
+          
+          case 'w_bishop':
+  
+            c1 = main.methods.w_options(position,[{x: 1, y: 1},{x: 2, y: 2},{x: 3, y: 3},{x: 4, y: 4},{x: 5, y: 5},{x: 6, y: 6},{x: 7, y: 7}]);
+            c2 = main.methods.w_options(position,[{x: 1, y: -1},{x: 2, y: -2},{x: 3, y: -3},{x: 4, y: -4},{x: 5, y: -5},{x: 6, y: -6},{x: 7, y: -7}]);
+            c3 = main.methods.w_options(position,[{x: -1, y: 1},{x: -2, y: 2},{x: -3, y: 3},{x: -4, y: 4},{x: -5, y: 5},{x: -6, y: 6},{x: -7, y: 7}]);
+            c4 = main.methods.w_options(position,[{x: -1, y: -1},{x: -2, y: -2},{x: -3, y: -3},{x: -4, y: -4},{x: -5, y: -5},{x: -6, y: -6},{x: -7, y: -7}]);
+  
+            coordinates = c1.concat(c2).concat(c3).concat(c4);
+  
+            options = coordinates.slice(0);
+            main.variables.highlighted = options.slice(0);
+            main.methods.togglehighlight(options);
+  
+            break;
+          
+          case 'b_bishop':
+  
+            c1 = main.methods.b_options(position,[{x: 1, y: 1},{x: 2, y: 2},{x: 3, y: 3},{x: 4, y: 4},{x: 5, y: 5},{x: 6, y: 6},{x: 7, y: 7}]);
+            c2 = main.methods.b_options(position,[{x: 1, y: -1},{x: 2, y: -2},{x: 3, y: -3},{x: 4, y: -4},{x: 5, y: -5},{x: 6, y: -6},{x: 7, y: -7}]);
+            c3 = main.methods.b_options(position,[{x: -1, y: 1},{x: -2, y: 2},{x: -3, y: 3},{x: -4, y: 4},{x: -5, y: 5},{x: -6, y: 6},{x: -7, y: 7}]);
+            c4 = main.methods.b_options(position,[{x: -1, y: -1},{x: -2, y: -2},{x: -3, y: -3},{x: -4, y: -4},{x: -5, y: -5},{x: -6, y: -6},{x: -7, y: -7}]);
+  
+            coordinates = c1.concat(c2).concat(c3).concat(c4);
+  
+            options = coordinates.slice(0);
+            main.variables.highlighted = options.slice(0);
+            main.methods.togglehighlight(options);
+            break;
+          case 'w_knight':
+  
+            coordinates = [{ x: -1, y: 2 },{ x: 1, y: 2 },{ x: 1, y: -2 },{ x: -1, y: -2 },{ x: 2, y: 1 },{ x: 2, y: -1 },{ x: -2, y: -1 },{ x: -2, y: 1 }].map(function(val){
+              return (parseInt(position.x) + parseInt(val.x)) + '_' + (parseInt(position.y) + parseInt(val.y));
+            });
+  
+            options = (main.methods.options(startpoint, coordinates, main.variables.pieces[selectedpiece].type)).slice(0);
+            main.variables.highlighted = options.slice(0);
+            main.methods.togglehighlight(options);
+  
+            break;
+          case 'b_knight':
+  
+            coordinates = [{ x: -1, y: 2 },{ x: 1, y: 2 },{ x: 1, y: -2 },{ x: -1, y: -2 },{ x: 2, y: 1 },{ x: 2, y: -1 },{ x: -2, y: -1 },{ x: -2, y: 1 }].map(function(val){
+              return (parseInt(position.x) + parseInt(val.x)) + '_' + (parseInt(position.y) + parseInt(val.y));
+            });
+  
+            options = (main.methods.options(startpoint, coordinates, main.variables.pieces[selectedpiece].type)).slice(0);
+            main.variables.highlighted = options.slice(0);
+            main.methods.togglehighlight(options);
+  
+            break;
+          case 'w_rook':
+  
+            c1 = main.methods.w_options(position,[{x: 1, y: 0},{x: 2, y: 0},{x: 3, y: 0},{x: 4, y: 0},{x: 5, y: 0},{x: 6, y: 0},{x: 7, y: 0}]);
+            c2 = main.methods.w_options(position,[{x: 0, y: 1},{x: 0, y: 2},{x: 0, y: 3},{x: 0, y: 4},{x: 0, y: 5},{x: 0, y: 6},{x: 0, y: 7}]);
+            c3 = main.methods.w_options(position,[{x: -1, y: 0},{x: -2, y: 0},{x: -3, y: 0},{x: -4, y: 0},{x: -5, y: 0},{x: -6, y: 0},{x: -7, y: 0}]);
+            c4 = main.methods.w_options(position,[{x: 0, y: -1},{x: 0, y: -2},{x: 0, y: -3},{x: 0, y: -4},{x: 0, y: -5},{x: 0, y: -6},{x: 0, y: -7}]);
+  
+            coordinates = c1.concat(c2).concat(c3).concat(c4);
+  
+            options = coordinates.slice(0);
+            main.variables.highlighted = options.slice(0);
+            main.methods.togglehighlight(options);
+            
+            break;
+          case 'b_rook':
+          
+            c1 = main.methods.b_options(position,[{x: 1, y: 0},{x: 2, y: 0},{x: 3, y: 0},{x: 4, y: 0},{x: 5, y: 0},{x: 6, y: 0},{x: 7, y: 0}]);
+            c2 = main.methods.b_options(position,[{x: 0, y: 1},{x: 0, y: 2},{x: 0, y: 3},{x: 0, y: 4},{x: 0, y: 5},{x: 0, y: 6},{x: 0, y: 7}]);
+            c3 = main.methods.b_options(position,[{x: -1, y: 0},{x: -2, y: 0},{x: -3, y: 0},{x: -4, y: 0},{x: -5, y: 0},{x: -6, y: 0},{x: -7, y: 0}]);
+            c4 = main.methods.b_options(position,[{x: 0, y: -1},{x: 0, y: -2},{x: 0, y: -3},{x: 0, y: -4},{x: 0, y: -5},{x: 0, y: -6},{x: 0, y: -7}]);
+  
+            coordinates = c1.concat(c2).concat(c3).concat(c4);
+  
+            options = coordinates.slice(0);
+            main.variables.highlighted = options.slice(0);
+            main.methods.togglehighlight(options);
+            
+            break;
+          case 'w_pawn':
+  
+            if (main.variables.pieces[selectedpiece].moved == false) {
+  
+              coordinates = [{ x: 0, y: 1 },{ x: 0, y: 2 },{ x: 1, y: 1 },{ x: -1, y: 1 }].map(function(val){
+                return (parseInt(position.x) + parseInt(val.x)) + '_' + (parseInt(position.y) + parseInt(val.y));
+              });
+  
+            }
+            else if (main.variables.pieces[selectedpiece].moved == true) {
+  
+              coordinates = [{ x: 0, y: 1 },{ x: 1, y: 1 },{ x: -1, y: 1 }].map(function(val){
+                return (parseInt(position.x) + parseInt(val.x)) + '_' + (parseInt(position.y) + parseInt(val.y));
+              });
+  
+            }
+  
+            options = (main.methods.options(startpoint, coordinates, main.variables.pieces[selectedpiece].type)).slice(0);
+            main.variables.highlighted = options.slice(0);
+            main.methods.togglehighlight(options);
+  
+            break;
+  
+          case 'b_pawn':
+  
+            // calculate pawn options
+            if (main.variables.pieces[selectedpiece].moved == false) {
+  
+              coordinates = [{ x: 0, y: -1 },{ x: 0, y: -2 },{ x: 1, y: -1 },{ x: -1, y: -1 }].map(function(val){
+                return (parseInt(position.x) + parseInt(val.x)) + '_' + (parseInt(position.y) + parseInt(val.y));
+              });
+  
+            }
+            else if (main.variables.pieces[selectedpiece].moved == true) {
+  
+              coordinates = [{ x: 0, y: -1 },{ x: 1, y: -1 },{ x: -1, y: -1 }].map(function(val){
+                return (parseInt(position.x) + parseInt(val.x)) + '_' + (parseInt(position.y) + parseInt(val.y));
+              });
+  
+            }
+  
+            options = (main.methods.options(startpoint, coordinates, main.variables.pieces[selectedpiece].type)).slice(0);
+            main.variables.highlighted = options.slice(0);
+            main.methods.togglehighlight(options);
+  
+            break;
+  
+        }
+      },
+  
+      options: function(startpoint, coordinates, piecetype) { // check if any of the possible coordinates is out of bounds;
+          
+        coordinates = coordinates.filter(val => {
+          let pos = { x: 0, y: 0 };
+          pos.x = parseInt(val.split('_')[0]);
+          pos.y = parseInt(val.split('_')[1]);
+  
+          if (!(pos.x < 1) && !(pos.x > 8) && !(pos.y < 1) && !(pos.y > 8)) { // if it is not out of bounds, return the coordinate;
+            return val;
+          }
+        });
+  
+        switch (piecetype) {
+  
+          case 'w_king':
+  
+            coordinates = coordinates.filter(val => {
+              return ($('#' + val).attr('chess') == 'null' || ($('#' + val).attr('chess')).slice(0,1) == 'b');
+            });
+  
+            break;
+          case 'b_king':
+          
+            coordinates = coordinates.filter(val => {
+              return ($('#' + val).attr('chess') == 'null' || ($('#' + val).attr('chess')).slice(0,1) == 'w');
+            });
+  
+            break;
+          case 'w_knight':
+  
+            coordinates = coordinates.filter(val => {
+              return ($('#' + val).attr('chess') == 'null' || ($('#' + val).attr('chess')).slice(0,1) == 'b');
+            });
+  
+            break;
+  
+          case 'b_knight':
+  
+            coordinates = coordinates.filter(val => {
+              return ($('#' + val).attr('chess') == 'null' || ($('#' + val).attr('chess')).slice(0,1) == 'w');
+            });
+  
+            break;
+  
+          case 'w_pawn':
+  
+              coordinates = coordinates.filter(val => {
+                let sp = { x: 0, y: 0 };
+                let coordinate = val.split('_');
+  
+                sp.x = startpoint.split('_')[0];
+                sp.y = startpoint.split('_')[1];
+                
+                if (coordinate[0] < sp.x || coordinate[0] > sp.x){ // if the coordinate is on either side of the center, check if it has an opponent piece on it;
+                  return ($('#' + val).attr('chess') != 'null' && ($('#' + val).attr('chess')).slice(0,1) == 'b'); // return coordinates with opponent pieces on them
+                } else { // else if the coordinate is in the center;
+                  if (coordinate[1] == (parseInt(sp.y) + 2) && $('#' + sp.x + '_' + (parseInt(sp.y) + 1)).attr('chess') != 'null'){
+                    return false;
+                  } else {
+                    return ($('#' + val).attr('chess') == 'null'); // otherwise return the coordinate if there is no chess piece on it;
+                  }
+                }
+                            
+              });
+           
+            break;
+  
+          case 'b_pawn':
+  
+            coordinates = coordinates.filter(val => {
+              let sp = { x: 0, y: 0 };
+              let coordinate = val.split('_');
+  
+              sp.x = startpoint.split('_')[0];
+              sp.y = startpoint.split('_')[1];
+              
+              if (coordinate[0] < sp.x || coordinate[0] > sp.x){ // if the coordinate is on either side of the center, check if it has an opponent piece on it;
+                return ($('#' + val).attr('chess') != 'null' && ($('#' + val).attr('chess')).slice(0,1) == 'w'); // return coordinates with opponent pieces on them
+              } else { // else if the coordinate is in the center;
+                if (coordinate[1] == (parseInt(sp.y) - 2) && $('#' + sp.x + '_' + (parseInt(sp.y) - 1)).attr('chess') != 'null'){
+                  return false;
+                } else {
+                  return ($('#' + val).attr('chess') == 'null'); // otherwise return the coordinate if there is no chess piece on it;
+                }
+              }
+            });
+  
+            break;
+        }      
+  
+        return coordinates;
+      },
+  
+      w_options: function (position, directions) {
+        let result = [];
+  
+        directions.forEach(dir => {
+          let flag = false;
+          directions.forEach(dir => {
+            let x = parseInt(position.x) + dir.x;
+            let y = parseInt(position.y) + dir.y;
+          
+            if (x < 1 || x > 8 || y < 1 || y > 8) return;
+          
+            let id = `${x}_${y}`;
+            let target = $('#' + id).attr('chess');
+          
+            if (target === 'null') {
+              result.push(id);
+            } else if (target[0] === 'b') {
+              result.push(id);
+            }
+          });
+        });
+  
+        return result;
+      },
+  
+      b_options: function (position, directions) {
+        let result = [];
+  
+        directions.forEach(dir => {
+          let flag = false;
+          directions.forEach(dir => {
+            let x = parseInt(position.x) + dir.x;
+            let y = parseInt(position.y) + dir.y;
+          
+            if (x < 1 || x > 8 || y < 1 || y > 8) return;
+          
+            let id = `${x}_${y}`;
+            let target = $('#' + id).attr('chess');
+          
+            if (target === 'null') {
+                result.push(id);
+                flag = true;
+              } else if (target[0] === 'w') { // allow capturing white pieces
+                result.push(id);
+                flag = false; // stop in that direction
+              } else {
+                flag = false; // own piece blocks
+              }
+          });
+        });
+  
+        return result;
+      },
+  
+      capture: function (target) {
+        let selectedpiece = {
+          name: $('#' + main.variables.selectedpiece).attr('chess'),
+          id: main.variables.selectedpiece
+        };
+      
+        // Move capturing piece
+        $('#' + target.id).html(main.variables.pieces[selectedpiece.name].img);
+        $('#' + target.id).attr('chess', selectedpiece.name);
+        $('#' + selectedpiece.id).html('');
+        $('#' + selectedpiece.id).attr('chess', 'null');
+        main.variables.pieces[selectedpiece.name].position = target.id;
+        main.variables.pieces[selectedpiece.name].moved = true;
+      
+        // Mark captured piece
+        main.variables.pieces[target.name].captured = true;
+      
+        // ❗ Check if king was captured
+        if (target.name.endsWith('_king')) {
+          setTimeout(() => {
+            alert("Game Over! " + (target.name[0] === 'w' ? "Black" : "White") + " wins by capturing the king!");
+            location.reload(); // or implement your own reset/game over logic
+          }, 10);
+          return;
+        }
+      },
+      
+  
+      move: function (target) {
+  
+        let selectedpiece = $('#' + main.variables.selectedpiece).attr('chess');
+  
+        // new cell
+        $('#' + target.id).html(main.variables.pieces[selectedpiece].img);
+        $('#' + target.id).attr('chess',selectedpiece);
+        // old cell
+        $('#' + main.variables.selectedpiece).html('');
+        $('#' + main.variables.selectedpiece).attr('chess','null');
+        main.variables.pieces[selectedpiece].position = target.id;
+        main.variables.pieces[selectedpiece].moved = true;
+  
+      },
+  
+      endturn: function(){
+        console.log("endturn called, turn is", main.variables.turn);
+      
+        let nextTurn = main.variables.turn === 'w' ? 'b' : 'w';
+
+        main.methods.togglehighlight(main.variables.highlighted);
+        main.variables.highlighted.length = 0;
+        main.variables.selectedpiece = '';
+
+        let isCheckmate = main.methods.checkmate(nextTurn);
+        console.log("Checkmate status:", isCheckmate);
+
+        if (isCheckmate) {
+        alert("Checkmate! " + (nextTurn === 'w' ? "Black" : "White") + " wins!");
+        return; // Skip switching turns if game is over
+        }
+
+        main.variables.turn = nextTurn;
+        $('#turn').html("It's " + (nextTurn === 'w' ? "Whites" : "Blacks") + " Turn");
+
+        $('#turn').addClass('turnhighlight');
+        window.setTimeout(function(){
+        $('#turn').removeClass('turnhighlight');
+        }, 1500);
+
+      },      
+      
+  
+      togglehighlight: function(options) {
+        options.forEach(function(element, index, array) {
+          $('#' + element).toggleClass("available");
+        });
+      },
+
+      checkmate: function(currentTurn) {
+        let king = currentTurn === 'w' ? 'w_king' : 'b_king';
+        let kingPos = main.variables.pieces[king].position;
+      
+        let inCheck = main.methods.isInCheck(kingPos, currentTurn);
+        console.log("King position:", kingPos, "In Check:", inCheck);
+        if (!inCheck) return false;
+      
+        for (let piece in main.variables.pieces) {
+          if (main.variables.pieces[piece].captured) continue;
+          if (piece[0] !== currentTurn) continue;
+      
+          let options = main.methods.moveoptions_simulate(piece);
+          console.log("Piece:", piece, "Options:", options);
+          if (options.length > 0) return false;
+        }
+      
+        return true;
+      },
+      
+  
+      moveoptions_simulate: function(pieceName) {
+        let posBackup = main.variables.pieces[pieceName].position;
+        let capturedBackup = {};
+        let result = [];
+  
+        let options = main.methods.moveoptions_core(pieceName);
+  
+        options.forEach(target => {
+          let targetPieceName = $('#' + target).attr('chess');
+  
+          // Save captured piece's state if exists
+          if (targetPieceName && targetPieceName !== 'null') {
+            capturedBackup[targetPieceName] = { ...main.variables.pieces[targetPieceName] };
+            main.variables.pieces[targetPieceName].captured = true;
+          }
+  
+          // Simulate move
+          main.variables.pieces[pieceName].position = target;
+          let isStillInCheck = main.methods.isInCheck(
+            main.variables.pieces[pieceName].type.endsWith('king') ? target : main.variables.pieces[pieceName[0] + '_king'].position,
+            pieceName[0]
+          );
+  
+          // Restore
+          main.variables.pieces[pieceName].position = posBackup;
+          if (targetPieceName && targetPieceName !== 'null') {
+            main.variables.pieces[targetPieceName] = { ...capturedBackup[targetPieceName] };
+          }
+
+  
+          if (!isStillInCheck) {
+            result.push(target);
+          }
+        });
+  
+        return result;
+      },
+  
+      moveoptions_core: function(pieceName) {
+        let previousSelected = main.variables.selectedpiece;
+        let previousHighlighted = main.variables.highlighted.slice();
+  
+        main.variables.selectedpiece = main.variables.pieces[pieceName].position;
+        main.methods.moveoptions(pieceName);
+        let options = main.variables.highlighted.slice();
+  
+        // Restore state
+        main.methods.togglehighlight(main.variables.highlighted);
+        main.variables.selectedpiece = previousSelected;
+        main.variables.highlighted = previousHighlighted;
+  
+        return options;
+      },
+
+      isInCheck: function(kingPos, currentTurn){
+        for (let pieceName in main.variables.pieces) {
+            let piece = main.variables.pieces[pieceName];
+        
+            if (piece.captured) continue;                     // Skip captured
+            if (pieceName[0] === currentTurn) continue;       // Skip same color
+        
+            let moves = main.methods.moveoptions_core(pieceName); // Get its possible moves
+        
+            if (moves.includes(kingPos)) {
+              return true; // Enemy piece can attack king!
+            }
+          }
+          return false;
+      }
+    
+    }
+  };
+  
+  $(document).ready(function() {
+    main.methods.gamesetup();
+  
+    $('.gamecell').click(function(e) {
+  
+      var selectedpiece = {
+        name: '',
+        id: main.variables.selectedpiece
+      };
+  
+      if (main.variables.selectedpiece == ''){
+        selectedpiece.name = $('#' + e.target.id).attr('chess');
+      } else {
+        selectedpiece.name = $('#' + main.variables.selectedpiece).attr('chess');
+      }
+  
+      var target = {
+        name: $(this).attr('chess'),
+        id: e.target.id
+      };
+  
+      if (main.variables.selectedpiece == '' && target.name.slice(0,1) == main.variables.turn) { // show options
+  
+        // moveoptions
+        main.variables.selectedpiece = e.target.id;
+        main.methods.moveoptions($(this).attr('chess'));
+  
+      } else if (
+        main.variables.selectedpiece !== '' &&
+        target.name === 'null' &&
+        main.variables.highlighted.includes(target.id)
+      ) {
+  
+        if (selectedpiece.name == 'w_king' || selectedpiece.name == 'b_king'){
+          
+          let t0 = (selectedpiece.name === 'w_king');
+          let t1 = (selectedpiece.name = 'b_king');
+          let t2 = (main.variables.pieces[selectedpiece.name].moved == false);
+          let t3 = (main.variables.pieces['b_rook2'].moved == false);
+          let t4 = (main.variables.pieces['w_rook2'].moved == false);
+          let t5 = (target.id == '7_8');
+          let t6 = (target.id == '7_1');
+    
+          if (t0 && t2 && t4 &&t6){ // castle w_king
+    
+            let pathClear = true;
+            if ($('#6_1').attr('chess') !== 'null' || $('#7_1').attr('chess') !== 'null') {
+              pathClear = false;
+            }
+          
+            let underAttack = main.methods.isInCheck('5_1', 'w') || main.methods.isInCheck('6_1', 'w') || main.methods.isInCheck('7_1', 'w');
+          
+            if (pathClear && !underAttack) {
+              // do castling
+              let k_position = '5_1';
+              let k_target = '7_1';
+              let r_position = '8_1';
+              let r_target = '6_1';
+          
+              main.variables.pieces['w_king'].position = '7_1';
+              main.variables.pieces['w_king'].moved = true;
+              $('#' + k_position).html('');
+              $('#' + k_position).attr('chess', 'null');
+              $('#' + k_target).html(main.variables.pieces['w_king'].img);
+              $('#' + k_target).attr('chess', 'w_king');
+          
+              main.variables.pieces['w_rook2'].position = '6_1';
+              main.variables.pieces['w_rook2'].moved = true;
+              $('#' + r_position).html('');
+              $('#' + r_position).attr('chess', 'null');
+              $('#' + r_target).html(main.variables.pieces['w_rook2'].img);
+              $('#' + r_target).attr('chess', 'w_rook2');
+          
+              main.methods.endturn();
+              return;
+            }
+          
+    
+          } else if (t1 && t2 && t3 && t5){ // castle b_king
+    
+            let k_position = '5_8';
+            let k_target = '7_8';
+            let r_position = '8_8';
+            let r_target = '6_8';
+    
+            // w_king
+            main.variables.pieces['b_king'].position = '7_8';
+            main.variables.pieces['b_king'].moved = true;
+            $('#'+k_position).html('');
+            $('#'+k_position).attr('chess','null');
+            $('#'+k_target).html(main.variables.pieces['b_king'].img);
+            $('#'+k_target).attr('chess','b_king');
+    
+            main.variables.pieces['b_rook2'].position = '6_8';
+            main.variables.pieces['b_rook2'].moved = true;
+            $('#'+r_position).html('');
+            $('#'+r_position).attr('chess','null');
+            $('#'+r_target).html(main.variables.pieces['b_rook2'].img);
+            $('#'+r_target).attr('chess','b_rook2');
+    
+            main.methods.endturn();
+            
+          } else { // move selectedpiece
+            main.methods.move(target);
+            main.methods.endturn();
+          }
+    
+        } else { // else if selecedpiece.name is not white/black king than move
+  
+          main.methods.move(target);
+          main.methods.endturn();
+  
+        }
+          
+      } else if (main.variables.selectedpiece !='' && target.name != 'null' && target.id != selectedpiece.id && selectedpiece.name.slice(0,1) != target.name.slice(0,1)){ // capture a piece
+        
+        if (selectedpiece.id != target.id && main.variables.highlighted.indexOf(target.id) != (-1)) { // if it's not trying to capture pieces not in its movement range
+          
+          // capture
+          main.methods.capture(target)
+          main.methods.endturn();
+          
+        }
+  
+      } else if (main.variables.selectedpiece !='' && target.name != 'null' && target.id != selectedpiece.id && selectedpiece.name.slice(0,1) == target.name.slice(0,1)){ // toggle move options
+  
+        // toggle
+        main.methods.togglehighlight(main.variables.highlighted);
+        main.variables.highlighted.length = 0;
+  
+        main.variables.selectedpiece = target.id;
+        main.methods.moveoptions(target.name);
+      }
+
+    });
+
+    $('body').contextmenu(function(e) {
+      e.preventDefault();
+    });
+
+  });

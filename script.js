@@ -665,6 +665,7 @@ let main = {
 
         if (isCheckmate) {
         alert("Checkmate! " + (nextTurn === 'w' ? "Black" : "White") + " wins!");
+        location.reload();
         return; // Skip switching turns if game is over
         }
 
